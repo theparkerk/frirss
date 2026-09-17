@@ -158,6 +158,10 @@ The first launch generates the JWT secret and the token-encryption key and store
 | `FRIRSS_REFRESH_MAX_FEEDS` | Number of feeds to refresh per button press (non-integer or < 1 → default) | `1000` |
 | `FRIRSS_PROXY_RATE_LIMIT` | Proxied **and** article-extraction requests allowed per user per minute — one shared budget (`0` disables; non-integer or negative → default) | `600` |
 | `CORS_ORIGIN` | Allowed CORS origin(s) — only for split front/back deployments | — |
+| `EXTRACT_COOKIES_FILE` | Per-domain cookies for paywalled full-text extraction, JSON `[{"domain","cookies"}]`, re-read when it changes (default `<FRIRSS_DATA_DIR>/extract-cookies.json`) |
+| `OBSIDIAN_VAULT_DIR` | Obsidian vault mounted in the container; enables the Obsidian bridge (quotes + save-to-note). Unset = off |
+| `OBSIDIAN_QUOTES_FILE` | Vault-relative quotes file (default `!! Inbox !!/Quotes/Reading Highlights.md`) |
+| `OBSIDIAN_SAVE_DIR` | Vault-relative folder for saved articles (default `!! Inbox !!/ReadItLater`) |
 
 > Since 1.4.10 the **server** extracts article text: the browser asks
 > `GET /api/extract` first, and falls back to extracting the page itself only

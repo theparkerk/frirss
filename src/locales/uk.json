@@ -689,5 +689,12 @@
       "actions": "Дії",
       "servers": "Сервери"
     }
+  },
+  "obsidian": {
+    "save": "Зберегти в Obsidian",
+    "sendQuote": "Надіслати цитату в Obsidian",
+    "quoteSaved": "Цитату збережено в Obsidian",
+    "articleSaved": "Статтю збережено в Obsidian",
+    "failed": "Не вдалося надіслати в Obsidian"
   }
 }

@@ -671,5 +671,12 @@
       "actions": "Azioni",
       "servers": "Server"
     }
+  },
+  "obsidian": {
+    "save": "Salva in Obsidian",
+    "sendQuote": "Invia citazione a Obsidian",
+    "quoteSaved": "Citazione salvata in Obsidian",
+    "articleSaved": "Articolo salvato in Obsidian",
+    "failed": "Invio a Obsidian non riuscito"
   }
 }

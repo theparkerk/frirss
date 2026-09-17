@@ -671,5 +671,12 @@
       "actions": "Acties",
       "servers": "Servers"
     }
+  },
+  "obsidian": {
+    "save": "Opslaan in Obsidian",
+    "sendQuote": "Citaat naar Obsidian sturen",
+    "quoteSaved": "Citaat opgeslagen in Obsidian",
+    "articleSaved": "Artikel opgeslagen in Obsidian",
+    "failed": "Versturen naar Obsidian mislukt"
   }
 }

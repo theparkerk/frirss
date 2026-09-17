@@ -45,3 +45,18 @@ describe('menuAnchor', () => {
     expect(menuAnchor({ clientX: 0, clientY: 0 }, { left: 10, bottom: 300 })).toEqual({ x: 10, y: 300 });
   });
 });
+
+describe('articleMenuItems — pont Obsidian', () => {
+  it('ajoute « Enregistrer dans Obsidian » en dernier, seulement si activé', () => {
+    const kinds = (o?: { obsidian?: boolean }) => articleMenuItems(base, false, o).map((i) => i.kind);
+    expect(kinds()).not.toContain('saveObsidian');
+    expect(kinds({ obsidian: false })).not.toContain('saveObsidian');
+    const on = articleMenuItems(base, false, { obsidian: true });
+    expect(on.at(-1)).toEqual({ kind: 'saveObsidian', labelKey: 'obsidian.save' });
+  });
+
+  it('reste disponible sans URL — le résumé du flux suffit à une note', () => {
+    expect(articleMenuItems({ ...base, url: '' }, false, { obsidian: true }).map((i) => i.kind))
+      .toEqual(['toggleRead', 'toggleStar', 'toggleReadLater', 'saveObsidian']);
+  });
+});

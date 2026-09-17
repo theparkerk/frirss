@@ -1261,6 +1261,48 @@ Vignette cliquable (façade) au lieu d'un `<iframe>` chargé d'emblée.
 
 ---
 
+### Pont Obsidian (fork theparkerk/frirss)
+
+Fonctionnalité du fork, absente de l'amont. Le backend écrit du Markdown
+**directement dans un coffre Obsidian** monté dans le conteneur
+(`OBSIDIAN_VAULT_DIR`) ; Obsidian Sync le porte ensuite sur tous les appareils.
+Aucun `obsidian://`, aucune limite de longueur d'URL, aucun changement
+d'application sur le téléphone. Tout est masqué tant que le serveur ne répond
+pas `enabled: true` sur `GET /api/obsidian/status`.
+
+- **Citation** — sélectionner du texte dans le corps de l'article
+  (`.article-content`) fait apparaître, après 220 ms de repos, un bouton
+  flottant « Envoyer la citation à Obsidian »
+  (`src/components/ReadingPane/ObsidianQuotePopover.tsx`). Un bouton, et non un
+  enregistrement à la sélection : sur un téléphone, sélectionner pour copier ne
+  doit pas arroser le coffre. `POST /api/obsidian/quote` ajoute au fichier
+  `OBSIDIAN_QUOTES_FILE` (défaut `!! Inbox !!/Quotes/Reading Highlights.md`) un
+  bloc `### date` / `> texte` / `— *Titre* by Auteur` / `[Source](url)` /
+  `Feed: …` / `---` — le format exact de l'ancien plugin ReadOB.
+- **Article** — bouton « Enregistrer dans Obsidian » dans la barre du volet
+  (bureau), dans la feuille « Plus » (mobile) et dans le menu contextuel de la
+  liste (`saveObsidian` dans `src/lib/articleMenu.ts`). `POST /api/obsidian/save`
+  choisit le meilleur corps disponible : le texte complet déjà extrait sur
+  l'appareil, sinon une extraction serveur de l'URL (cookies d'abonnement
+  compris), sinon le résumé du flux ; puis Turndown le convertit en Markdown et
+  l'écrit sous `OBSIDIAN_SAVE_DIR` (défaut `!! Inbox !!/ReadItLater`) en
+  `AAAA-MM-JJ - Titre.md`, dédoublonné en ` (2)`, ` (3)`… Frontmatter
+  `type: web-clip` (title, source, author, feed, date-saved, tags, status).
+- **Garde-fous** — JWT requis, 60 écritures par minute, tout chemin résolu sous
+  le coffre (`resolveInVault`) ; `script`, `style`, `iframe` et les éléments de
+  formulaire ne passent jamais dans une note.
+
+### Cookies d'abonnement pour l'extraction (fork)
+
+`server/extractCookies.ts` : un fichier JSON `[{ "domain", "cookies" }]`
+(`EXTRACT_COOKIES_FILE`, relu à chaque changement de date de modification)
+ajoute un en-tête `Cookie` et un User-Agent de navigateur aux requêtes de
+`/api/extract` et du pont Obsidian dont l'hôte correspond (suffixe exact :
+`wsj.com` couvre `www.wsj.com`, jamais `notwsj.com`). La clé de cache d'une
+extraction avec cookies porte un suffixe dérivé des cookies, pour qu'un talon
+de paywall et l'article réel ne s'écrasent jamais. Les valeurs ne sont jamais
+journalisées.
+
 ## Abonnements
 
 Ajout d'un flux par URL avec choix de la catégorie, renommage, suppression.
@@ -2523,6 +2565,9 @@ qu'un terme n'est pas déjà pris avant de le réutiliser.
 | POST | `/api/setup/restore` | Idem, instance vierge uniquement |
 | ALL | `/api/proxy` | Passage vers FreshRSS ; extraction d'articles en repli |
 | GET | `/api/extract` | Article extrait côté serveur, depuis le cache partagé ou fraîchement |
+| GET | `/api/obsidian/status` | Le pont Obsidian est-il configuré (`OBSIDIAN_VAULT_DIR`) |
+| POST | `/api/obsidian/quote` | Ajouter une citation au fichier de citations du coffre |
+| POST | `/api/obsidian/save` | Écrire un article en note Markdown dans le coffre |
 
 ---
 
@@ -2536,6 +2581,13 @@ fichiers statiques et `trust proxy`) · `PORT` (port interne d'Express, 3001) ·
 
 **Proxy sortant** — `PROXY_REWRITES` · `PROXY_INTERNAL_HOSTS` ·
 `FRIRSS_PROXY_RATE_LIMIT`
+
+**Extraction** — `EXTRACT_COOKIES_FILE` (cookies par domaine pour les sites à
+abonnement, défaut `<FRIRSS_DATA_DIR>/extract-cookies.json`)
+
+**Pont Obsidian** — `OBSIDIAN_VAULT_DIR` (coffre monté dans le conteneur ;
+absent = fonctionnalité désactivée) · `OBSIDIAN_QUOTES_FILE` ·
+`OBSIDIAN_SAVE_DIR`
 
 **Cache et relève** — `REDIS_URL` · `CACHE_ARTICLES_PER_FEED` · `CACHE_TTL` ·
 `CACHE_SYNC_INTERVAL` · `CACHE_SYNC_ACTIVE_DAYS` · `CACHE_SYNC_PARALLEL_USERS` ·
@@ -2560,7 +2612,7 @@ Chaque famille correspond à une zone de l'interface :
 `app` · `sidebar` · `addFeed` · `articleList` · `articleRow` · `swipe` ·
 `emptyState` · `readingPane` · `preferences` · `login` · `admin` · `servers` ·
 `dates` · `time` · `shortcutBar` · `viewMode` · `connection` · `update` ·
-`refresh` · `saved` · `backup` · `toast` · `palette`
+`refresh` · `saved` · `backup` · `toast` · `palette` · `obsidian`
 
 ---
 

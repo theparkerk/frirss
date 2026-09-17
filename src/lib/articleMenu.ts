@@ -2,7 +2,12 @@
  * Menu contextuel d'un article : ce qu'il contient, et où il s'ouvre.
  * Spec : docs/superpowers/specs/2026-09-13-article-context-menu-design.md
  */
-export type ArticleMenuKind = 'openSource' | 'toggleRead' | 'toggleStar' | 'toggleReadLater' | 'copyLink';
+export type ArticleMenuKind = 'openSource' | 'toggleRead' | 'toggleStar' | 'toggleReadLater' | 'copyLink' | 'saveObsidian';
+
+export interface ArticleMenuOptions {
+  /** Serveur configuré pour écrire dans un coffre Obsidian (`/api/obsidian`). */
+  obsidian?: boolean;
+}
 
 export interface ArticleMenuItem {
   kind: ArticleMenuKind;
@@ -17,6 +22,7 @@ export interface ArticleMenuItem {
 export function articleMenuItems(
   article: { url?: string; read: boolean; starred: boolean },
   isReadLater: boolean,
+  opts: ArticleMenuOptions = {},
 ): ArticleMenuItem[] {
   const hasUrl = !!article.url?.trim();
   const items: ArticleMenuItem[] = [];
@@ -25,6 +31,8 @@ export function articleMenuItems(
   items.push({ kind: 'toggleStar', labelKey: article.starred ? 'articleRow.removeStar' : 'articleRow.addStar' });
   items.push({ kind: 'toggleReadLater', labelKey: isReadLater ? 'articleRow.removeReadLater' : 'articleRow.addReadLater' });
   if (hasUrl) items.push({ kind: 'copyLink', labelKey: 'articleRow.copyLink' });
+  // « Enregistrer dans Obsidian » n'apparaît que si le serveur l'a activé.
+  if (opts.obsidian) items.push({ kind: 'saveObsidian', labelKey: 'obsidian.save' });
   return items;
 }
 

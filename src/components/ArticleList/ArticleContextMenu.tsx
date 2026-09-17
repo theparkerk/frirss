@@ -20,6 +20,9 @@ interface ArticleContextMenuProps {
   onToggleStar: () => void;
   onToggleReadLater: () => void;
   onCopyLink: () => void;
+  /** Pont Obsidian (`/api/obsidian`) : entrée affichée seulement si activé côté serveur. */
+  obsidianEnabled?: boolean;
+  onSaveObsidian?: () => void;
 }
 
 /**
@@ -34,9 +37,10 @@ interface ArticleContextMenuProps {
 export default function ArticleContextMenu({
   article, isReadLater, x, y, sheet,
   onClose, onOpenSource, onToggleRead, onToggleStar, onToggleReadLater, onCopyLink,
+  obsidianEnabled = false, onSaveObsidian,
 }: ArticleContextMenuProps) {
   const { t } = useTranslation();
-  const items = articleMenuItems(article, isReadLater);
+  const items = articleMenuItems(article, isReadLater, { obsidian: obsidianEnabled && !!onSaveObsidian });
   const menuRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState({ left: x, top: y });
 
@@ -46,6 +50,7 @@ export default function ArticleContextMenu({
     toggleStar: onToggleStar,
     toggleReadLater: onToggleReadLater,
     copyLink: onCopyLink,
+    saveObsidian: onSaveObsidian ?? (() => {}),
   };
   const run = (kind: ArticleMenuKind) => {
     actions[kind]();

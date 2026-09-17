@@ -25,6 +25,13 @@ services:
       # - CACHE_SYNC_INTERVAL=15
       # Reach FreshRSS directly over the internal network instead of its public URL
       # - PROXY_REWRITES=https://rss.example.com=http://freshrss:80
+      # Obsidian bridge (fork): write quotes + saved articles into a mounted vault
+      # - OBSIDIAN_VAULT_DIR=/obsidian-vault
+      # - OBSIDIAN_QUOTES_FILE=!! Inbox !!/Quotes/Reading Highlights.md
+      # - OBSIDIAN_SAVE_DIR=!! Inbox !!/ReadItLater
+      # Paywall cookies for full-text extraction: [{ "domain", "cookies" }]
+      # - EXTRACT_COOKIES_FILE=/app/data/extract-cookies.json
     volumes:
       - ./frirss-data:/app/data  # SQLite DB persisted here
+      # - /path/to/ObsidianVault:/obsidian-vault
     restart: unless-stopped

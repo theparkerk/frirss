@@ -20,6 +20,7 @@ import ArticleCard from './ArticleCard';
 import FeedFavicon from '../FeedFavicon';
 import BottomSheet from '../BottomSheet';
 import ArticleContextMenu from './ArticleContextMenu';
+import { saveArticleAndNotify, useObsidianEnabled } from '../../api/obsidian';
 import { useArticleMenuGestures } from '../../hooks/useArticleMenuGestures';
 import { copyLink } from '../../lib/copyLink';
 import { useAuthStore } from '../../stores/authStore';
@@ -75,6 +76,7 @@ export default function ArticleList() {
   const subscriptions = useFeedStore((s) => s.subscriptions);
   const unreadCounts = useFeedStore((s) => s.unreadCounts);
   const pushToast = useUiStore((s) => s.pushToast);
+  const obsidianEnabled = useObsidianEnabled();
   const markReadOnScroll = useUiStore((s) => s.markReadOnScroll);
   const showSourceInAll = useUiStore((s) => s.showSourceInAll);
   const toggleShowSourceInFeed = useUiStore((s) => s.toggleShowSourceInFeed);
@@ -602,6 +604,8 @@ export default function ArticleList() {
           onToggleStar={() => { void toggleStar(menuArticle); }}
           onToggleReadLater={() => { void toggleReadLater(menuArticle); }}
           onCopyLink={() => { void copyArticleLink(menuArticle.url); }}
+          obsidianEnabled={obsidianEnabled}
+          onSaveObsidian={() => { void saveArticleAndNotify(menuArticle, null, { pushToast, t }); }}
         />
       )}
       {/* Header */}

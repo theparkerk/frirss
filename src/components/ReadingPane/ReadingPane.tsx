@@ -22,6 +22,8 @@ import { formatArticleDate } from '../../utils/dates';
 import { IMAGE_CACHE_NAME } from '../../lib/storageEstimate';
 import SavedCategoryPicker from '../ArticleList/SavedCategoryPicker';
 import BottomSheet from '../BottomSheet';
+import ObsidianQuotePopover from './ObsidianQuotePopover';
+import { saveArticleAndNotify, useObsidianEnabled } from '../../api/obsidian';
 // extractFullContent is loaded on demand (code-split) — see handleExtract.
 
 // Body placeholder shown while an auto-extract feed loads the full text.
@@ -147,6 +149,12 @@ export default function ReadingPane({ showBack }: ReadingPaneProps) {
   const [extracting, setExtracting] = useState(false);
   const [extractError, setExtractError] = useState<string | null>(null);
   const lastExtractedId = useRef<string | null>(null);
+
+  // Pont Obsidian : boutons et popover n'existent que si le serveur a un coffre.
+  const obsidianEnabled = useObsidianEnabled();
+  const saveToObsidian = useCallback((article: Article) => {
+    return saveArticleAndNotify(article, extractedContent?.content ?? null, { pushToast, t });
+  }, [extractedContent?.content, pushToast, t]);
 
   // Reading progress
   const [readProgress, setReadProgress] = useState(0);
@@ -1003,6 +1011,22 @@ export default function ReadingPane({ showBack }: ReadingPaneProps) {
           </button>
         )}
 
+        {/* Enregistrer dans Obsidian (pont serveur, voir server/obsidian.ts) */}
+        {obsidianEnabled && (
+          <button
+            onClick={() => { void saveToObsidian(article); }}
+            className="action-btn flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold transition-all duration-200"
+            style={{ color: 'var(--reading-meta)', border: '1.5px solid transparent' }}
+            title={t('obsidian.save')}
+            aria-label={t('obsidian.save')}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v11.25m0 0l-3.75-3.75M12 15.75l3.75-3.75M4.5 19.5h15" />
+            </svg>
+            <span>{t('obsidian.save')}</span>
+          </button>
+        )}
+
         {/* Spacer */}
         <div className="toolbar-spacer flex-1 min-w-0" />
 
@@ -1293,6 +1317,7 @@ export default function ReadingPane({ showBack }: ReadingPaneProps) {
               dangerouslySetInnerHTML={bodyProp}
             />
           )}
+          {obsidianEnabled && <ObsidianQuotePopover article={article} />}
         </article>
         </div>
       </div>
@@ -1391,6 +1416,18 @@ export default function ReadingPane({ showBack }: ReadingPaneProps) {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
                 </svg>
                 <span className="font-medium">{canNativeShare ? t('readingPane.share') : t('readingPane.copyLink')}</span>
+              </button>
+            )}
+            {obsidianEnabled && (
+              <button
+                onClick={() => { setReadSettingsOpen(false); void saveToObsidian(article); }}
+                className="sheet-row w-full flex items-center gap-3 px-4 py-3 text-left"
+                style={{ color: 'var(--reading-text)', borderTop: '1px solid var(--panel-border)' }}
+              >
+                <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.6}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v11.25m0 0l-3.75-3.75M12 15.75l3.75-3.75M4.5 19.5h15" />
+                </svg>
+                <span className="font-medium">{t('obsidian.save')}</span>
               </button>
             )}
             <div className="flex items-center justify-between gap-2 px-4 py-3" style={{ borderTop: '1px solid var(--panel-border)' }}>

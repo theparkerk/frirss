@@ -15,10 +15,11 @@ const article = {
   id: 'a1', title: 'Hello World', url: 'https://example.com/1', read: false, starred: false, labels: [],
 } as unknown as Article;
 
-function setup(over: { article?: Partial<Article>; isReadLater?: boolean; sheet?: boolean } = {}) {
+function setup(over: { article?: Partial<Article>; isReadLater?: boolean; sheet?: boolean; obsidian?: boolean } = {}) {
   const handlers = {
     onClose: vi.fn(), onOpenSource: vi.fn(), onToggleRead: vi.fn(),
     onToggleStar: vi.fn(), onToggleReadLater: vi.fn(), onCopyLink: vi.fn(),
+    onSaveObsidian: vi.fn(),
   };
   render(
     <ArticleContextMenu
@@ -27,6 +28,7 @@ function setup(over: { article?: Partial<Article>; isReadLater?: boolean; sheet?
       x={30}
       y={40}
       sheet={over.sheet ?? false}
+      obsidianEnabled={over.obsidian ?? false}
       {...handlers}
     />,
   );
@@ -152,6 +154,20 @@ describe('ArticleContextMenu', () => {
       setup({ sheet: true });
       expect(document.activeElement).toBe(outside);
       outside.remove();
+    });
+  });
+
+  describe('pont Obsidian', () => {
+    it('cache l’entrée par défaut et l’affiche en dernier quand le serveur l’active', () => {
+      setup();
+      expect(screen.queryByRole('button', { name: 'obsidian.save' })).toBeNull();
+      cleanup();
+      const h = setup({ obsidian: true });
+      const labels = screen.getAllByRole('button').map((b) => b.textContent);
+      expect(labels.at(-1)).toBe('obsidian.save');
+      fireEvent.click(screen.getByRole('button', { name: 'obsidian.save' }));
+      expect(h.onSaveObsidian).toHaveBeenCalledTimes(1);
+      expect(h.onClose).toHaveBeenCalledTimes(1);
     });
   });
 });

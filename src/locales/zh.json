@@ -671,5 +671,12 @@
       "actions": "操作",
       "servers": "服务器"
     }
+  },
+  "obsidian": {
+    "save": "保存到 Obsidian",
+    "sendQuote": "将引用发送到 Obsidian",
+    "quoteSaved": "引用已保存到 Obsidian",
+    "articleSaved": "文章已保存到 Obsidian",
+    "failed": "无法发送到 Obsidian"
   }
 }

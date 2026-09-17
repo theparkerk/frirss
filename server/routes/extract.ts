@@ -3,6 +3,7 @@ import { requireAuth } from '../middleware/auth.js';
 import { assertTargetSafe, fetchUpstream, finishError, proxyRateLimiter, UnresolvedTargetError } from './proxy.js';
 import { cacheEnabled, cacheGet, cacheSet, extractKey } from '../cache.js';
 import { extractArticle, ExtractorBusyError, withExtractSlot } from '../extract.js';
+import { cookieCacheSuffix, extractHeaders } from '../extractCookies.js';
 
 const router = Router();
 
@@ -140,7 +141,9 @@ async function produce(url: string, key: string | null): Promise<Outcome> {
     // `fetchUpstream` et pas `fetch` : c'est lui qui porte la garde anti-SSRF
     // et les réécritures PROXY_REWRITES. Un appel direct rouvrirait la porte
     // que le proxy ferme.
-    const upstream = await fetchUpstream(url, { headers: { Accept: 'text/html' } });
+    // Paywall cookies + a browser User-Agent when the operator configured
+    // them for this host (`server/extractCookies.ts`); nothing otherwise.
+    const upstream = await fetchUpstream(url, { headers: { Accept: 'text/html', ...extractHeaders(url) } });
     if (!upstream.ok) {
       // Corps annulé, comme pour un type refusé : sous undici la socket reste
       // retenue jusqu'au ramassage tant que le flux n'est ni lu ni annulé —
@@ -280,7 +283,9 @@ router.get('/', async (req, res) => {
     if (!(err instanceof UnresolvedTargetError)) return finishError(res, err, loggableTarget(url), 'Extract error:');
   }
 
-  const key = cacheEnabled ? extractKey(url) : null;
+  // A cookie-backed fetch is keyed apart from the anonymous one: the paywall
+  // stub and the real article must never overwrite each other in the cache.
+  const key = cacheEnabled ? extractKey(url + cookieCacheSuffix(url)) : null;
   if (key) {
     const hit = await cacheGet(key);
     if (hit != null) {
