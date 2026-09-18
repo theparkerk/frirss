@@ -10,7 +10,7 @@ export async function login(
   username: string,
   password: string
 ): Promise<string> {
-  const target = `${serverUrl.replace(/\/+$/, '')}/api/greader.php/accounts/ClientLogin`;
+  const target = `${serverUrl.trim().replace(/\/+$/, '')}/api/greader.php/accounts/ClientLogin`;
   const params = new URLSearchParams();
   params.append('Email', username);
   params.append('Passwd', password);

@@ -29,7 +29,7 @@ export default function AddServerDialog({ onClose, onAdded }: AddServerDialogPro
     setError('');
     setLoading(true);
     try {
-      const normalizedUrl = serverUrl.replace(/\/+$/, '');
+      const normalizedUrl = serverUrl.trim().replace(/\/+$/, '');
       const freshrssToken = await freshrssLogin(normalizedUrl, freshrssUser, freshrssPassword);
       const server = await apiAddServer({
         name: serverName || normalizedUrl,

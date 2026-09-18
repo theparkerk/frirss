@@ -464,7 +464,7 @@ function ServerStep() {
 
     try {
       // 1. Login to FreshRSS to get a token
-      const normalizedUrl = serverUrl.replace(/\/+$/, '');
+      const normalizedUrl = serverUrl.trim().replace(/\/+$/, '');
       const freshrssToken = await freshrssLogin(normalizedUrl, freshrssUser, freshrssPassword);
 
       // 2. Save server to backend DB

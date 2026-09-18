@@ -57,7 +57,9 @@ router.post('/', (req, res) => {
     }
 
     // Normalize URL (remove trailing slash)
-    const normalizedUrl = url.replace(/\/+$/, '');
+    // `trim()`: a URL pasted with a trailing space is not a blocked host, yet
+    // that is what the SSRF guard reported once the space reached `new URL()`.
+    const normalizedUrl = String(url).trim().replace(/\/+$/, '');
 
     // Check duplicate
     const existing = db.prepare(
@@ -98,7 +100,7 @@ router.put('/:id', (req, res) => {
       return res.status(404).json({ error: 'Server not found' });
     }
 
-    const normalizedUrl = url ? url.replace(/\/+$/, '') : server.url;
+    const normalizedUrl = url ? String(url).trim().replace(/\/+$/, '') : server.url;
 
     db.prepare(`
       UPDATE servers SET name = ?, url = ?, freshrss_user = ?, freshrss_token = ?, refresh_token = ?
