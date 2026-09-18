@@ -45,7 +45,8 @@
     "expandCategory": "Desplegar la categoría",
     "collapseCategory": "Plegar la categoría",
     "starOnGithub": "Dar una estrella en GitHub",
-    "support": "Apoyar el proyecto"
+    "support": "Apoyar el proyecto",
+    "autoExtractAllOn": "Artículo completo automático (activo para todas las fuentes)"
   },
   "addFeed": {
     "title": "Añadir una fuente RSS",
@@ -170,7 +171,9 @@
       "unreadScope": "Filtro No leídos",
       "unreadScopeFeed": "Por fuente",
       "unreadScopeAll": "Todas las fuentes",
-      "unreadScopeHint": "Con «Por fuente», cada fuente conserva su propia elección. Con «Todas las fuentes», el botón No leídos se aplica en todas partes. Volver a «Por fuente» borra las elecciones por fuente: cada fuente parte del estado actual."
+      "unreadScopeHint": "Con «Por fuente», cada fuente conserva su propia elección. Con «Todas las fuentes», el botón No leídos se aplica en todas partes. Volver a «Por fuente» borra las elecciones por fuente: cada fuente parte del estado actual.",
+      "autoExtractAll": "Artículo completo para todas las fuentes",
+      "autoExtractAllHint": "Cada artículo se abre con la página completa, como si «Artículo completo automático» estuviera activado en cada fuente. Al desactivarlo vuelven los ajustes por fuente."
     },
     "branding": {
       "language": "Idioma",

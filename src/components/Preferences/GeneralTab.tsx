@@ -14,6 +14,8 @@ export default function GeneralTab() {
   const unreadOnlyScope = useUiStore((s) => s.unreadOnlyScope);
   const setUnreadOnlyScope = useUiStore((s) => s.setUnreadOnlyScope);
   const inlineVideos = useUiStore((s) => s.inlineVideos);
+  const autoExtractAll = useUiStore((s) => s.autoExtractAll);
+  const setAutoExtractAll = useUiStore((s) => s.setAutoExtractAll);
   const setInlineVideos = useUiStore((s) => s.setInlineVideos);
   const { shortcuts, setShortcut, resetShortcuts } = useUiStore();
   const [editing, setEditing] = useState<string | null>(null);
@@ -92,6 +94,23 @@ export default function GeneralTab() {
               checked={markReadOnScroll}
               onChange={setMarkReadOnScroll}
               ariaLabel={t('preferences.general.markReadOnScroll')}
+            />
+          </span>
+        </div>
+
+        {/* Full article for every feed — the per-feed menu entry, once for all */}
+        <div className="flex items-start justify-between gap-4 select-none mt-4">
+          <span className="text-xs" style={{ color: 'var(--list-summary)' }}>
+            {t('preferences.general.autoExtractAll')}
+            <span className="block text-[11px] opacity-70 mt-0.5">
+              {t('preferences.general.autoExtractAllHint')}
+            </span>
+          </span>
+          <span className="mt-0.5">
+            <ToggleSwitch
+              checked={autoExtractAll}
+              onChange={setAutoExtractAll}
+              ariaLabel={t('preferences.general.autoExtractAll')}
             />
           </span>
         </div>

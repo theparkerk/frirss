@@ -45,7 +45,8 @@
     "feedLayoutDefault": "默认",
     "feedLayoutThisFeed": "此订阅源的布局",
     "starOnGithub": "在 GitHub 上标星",
-    "support": "支持本项目"
+    "support": "支持本项目",
+    "autoExtractAllOn": "自动全文（已对所有订阅源开启）"
   },
   "addFeed": {
     "title": "添加 RSS 订阅源",
@@ -170,7 +171,9 @@
       "unreadScope": "未读筛选",
       "unreadScopeFeed": "按订阅源",
       "unreadScopeAll": "全部订阅源",
-      "unreadScopeHint": "按订阅源：每个订阅源各自记住选择。全部订阅源：未读按钮对所有视图生效。切回“按订阅源”会清除各订阅源的单独选择，统一从当前状态开始。"
+      "unreadScopeHint": "按订阅源：每个订阅源各自记住选择。全部订阅源：未读按钮对所有视图生效。切回“按订阅源”会清除各订阅源的单独选择，统一从当前状态开始。",
+      "autoExtractAll": "所有订阅源显示全文",
+      "autoExtractAllHint": "每篇文章都以抓取的完整页面打开，如同每个订阅源都开启了\"自动全文\"。关闭后恢复各订阅源的单独设置。"
     },
     "branding": {
       "language": "语言",

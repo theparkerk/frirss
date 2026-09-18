@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { feedAutoExtractOn } from '../lib/autoExtract';
 import {
   getSubscriptionList,
   getUnreadCounts,
@@ -276,8 +277,8 @@ const warmRunner = createWarmRunner<Article>({
   settle: () => new Promise((r) => setTimeout(r, 2000)), // let the view settle first
 });
 function warmExtracts(articles: Article[], view: string): void {
-  const fs = useUiStore.getState().feedSettings;
-  void warmRunner.schedule(view, articles.filter((a) => a.url && fs[a.sourceId]?.autoExtract));
+  const prefs = useUiStore.getState();
+  void warmRunner.schedule(view, articles.filter((a) => a.url && feedAutoExtractOn(prefs, a.sourceId)));
 }
 
 // ── First-page prefetch ─────────────────────────────────────────────

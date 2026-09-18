@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { feedAutoExtractOn } from '../lib/autoExtract';
 import type { OfflineImagePreset, OfflineImageSized, OfflineImageSizes } from '../lib/offlineImages';
 import { normalizeRowActions, type RowActionKind, type RowActionSettings } from '../lib/rowActions';
 import { normalizeUnreadScope, switchUnreadScope, unreadOnlyFor, type UnreadScope } from '../lib/unreadScope';
@@ -189,6 +190,9 @@ export interface UiState {
   panelLayout: string;
   setPanelLayout: (layout: string) => void;
   feedSettings: Record<string, FeedSetting>;
+  /** Global « Auto full article » for every feed (synced). See src/lib/autoExtract.ts. */
+  autoExtractAll: boolean;
+  setAutoExtractAll: (v: boolean) => void;
   setFeedAutoExtract: (feedId: string, value: boolean) => void;
   getFeedAutoExtract: (feedId: string) => boolean;
   /** Set (or clear, with '') this feed's layout override. */
@@ -525,6 +529,14 @@ export const useUiStore = create<UiState>()((set, get) => ({
     set({ panelLayout: layout });
   },
 
+  // Global switch above the per-feed ones — one toggle instead of one
+  // context menu per feed.
+  autoExtractAll: loadJson('frirss_autoExtractAll', false),
+  setAutoExtractAll: (v) => {
+    localStorage.setItem('frirss_autoExtractAll', JSON.stringify(v));
+    set({ autoExtractAll: v });
+  },
+
   // Per-feed settings: { [feedId]: { autoExtract: true } }
   feedSettings: loadJson('frirss_feedSettings', {} as Record<string, FeedSetting>),
   setFeedAutoExtract: (feedId, value) => {
@@ -538,8 +550,8 @@ export const useUiStore = create<UiState>()((set, get) => ({
     });
   },
   getFeedAutoExtract: (feedId) => {
-    const { feedSettings } = get();
-    return feedSettings[feedId]?.autoExtract || false;
+    const { feedSettings, autoExtractAll } = get();
+    return feedAutoExtractOn({ autoExtractAll, feedSettings }, feedId);
   },
   setFeedLayout: (feedId, layout) => {
     set((state) => {
@@ -668,7 +680,7 @@ export const useUiStore = create<UiState>()((set, get) => ({
       'showSourceInFeed', 'showSourceInAll', 'feedSettings', 'shortcuts',
       'labelsCollapsed', 'savedCollapsed', 'savedCategoryNames', 'collapsedLabelGroups', 'collapsedCategories', 'unreadOnlyByFeed', 'unreadOnlyScope', 'unreadOnlyAll', 'hideReadFeeds',
       'confirmMarkAllRead', 'markReadOnScroll', 'showListFavicons', 'offlineImagePreset', 'inlineVideos', 'refreshHintDismissed',
-      'rowActions',
+      'rowActions', 'autoExtractAll',
     ];
     for (const k of jsonKeys) {
       if (has(k) && prefs[k] !== undefined && prefs[k] !== null) {
@@ -707,7 +719,7 @@ export const UI_SYNC_KEYS = [
   'feedSettings', 'appTitle', 'appLogo', 'logoMode', 'shortcuts',
   'labelsCollapsed', 'savedCollapsed', 'savedCategoryNames', 'collapsedLabelGroups', 'collapsedCategories', 'unreadOnlyByFeed', 'unreadOnlyScope', 'unreadOnlyAll', 'hideReadFeeds',
   'confirmMarkAllRead', 'markReadOnScroll', 'showListFavicons',
-  'offlineImagePreset', 'inlineVideos', 'refreshHintDismissed', 'rowActions',
+  'offlineImagePreset', 'inlineVideos', 'refreshHintDismissed', 'rowActions', 'autoExtractAll',
 ];
 
 // Keys into preferences.shortcuts.* in the locale files

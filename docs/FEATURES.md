@@ -1261,6 +1261,15 @@ Vignette cliquable (façade) au lieu d'un `<iframe>` chargé d'emblée.
 
 ---
 
+### Article complet pour tous les flux (fork)
+
+Préférences → Général → « Article complet pour tous les flux »
+(`autoExtractAll`, synchronisé). Un seul interrupteur au-dessus des réglages
+par flux : allumé, chaque flux se comporte comme si « Extraction automatique »
+était cochée dans son menu (préchargement de fond compris) ; le menu d'un flux
+l'indique et n'y touche plus. Éteint, les choix par flux reprennent la main.
+La règle vit dans `src/lib/autoExtract.ts` (`feedAutoExtractOn`), testée à part.
+
 ### Pont Obsidian (fork theparkerk/frirss)
 
 Fonctionnalité du fork, absente de l'amont. Le backend écrit du Markdown

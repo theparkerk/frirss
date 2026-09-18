@@ -16,6 +16,7 @@ import { isFocusToggleTarget } from '../../lib/readingFocus';
 import { extractYouTubeId, facadeMarkup, youtubeThumbnail } from '../../lib/youtube';
 import { READ_LATER_PREFIX, STARRED_PREFIX } from '../../lib/savedCategories';
 import { readableTextOn } from '../../lib/readableText';
+import { feedAutoExtractOn } from '../../lib/autoExtract';
 import { planHeroWarm, runHeroWarm } from '../../lib/heroWarm';
 import { rememberImageSize } from '../../lib/imageAspect';
 import { formatArticleDate } from '../../utils/dates';
@@ -113,6 +114,7 @@ export default function ReadingPane({ showBack }: ReadingPaneProps) {
   const getLabelColor = useThemeStore((s) => s.getLabelColor);
   const setFontSize = useThemeStore((s) => s.setFontSize);
   const feedSettings = useUiStore((s) => s.feedSettings);
+  const autoExtractAll = useUiStore((s) => s.autoExtractAll);
   const readingFocus = useUiStore((s) => s.readingFocus);
   const inlineVideos = useUiStore((s) => s.inlineVideos);
   // Which saved-category picker is open (null = none).
@@ -212,14 +214,14 @@ export default function ReadingPane({ showBack }: ReadingPaneProps) {
   useEffect(() => {
     if (!selectedArticle?.url || !selectedArticle?.sourceId) return;
     if (lastExtractedId.current === selectedArticle.id) return;
-    const autoExtract = feedSettings[selectedArticle.sourceId]?.autoExtract;
+    const autoExtract = feedAutoExtractOn({ autoExtractAll, feedSettings }, selectedArticle.sourceId);
     if (autoExtract) {
       const timer = setTimeout(() => {
         handleExtract();
       }, 100);
       return () => clearTimeout(timer);
     }
-  }, [selectedArticle?.id, selectedArticle?.sourceId, feedSettings]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [selectedArticle?.id, selectedArticle?.sourceId, feedSettings, autoExtractAll]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Préchargement de fond : préparer les articles suivants pour que passer à
   // eux soit instantané. Uniquement sur les flux à extraction automatique (les
@@ -257,7 +259,7 @@ export default function ReadingPane({ showBack }: ReadingPaneProps) {
     const timer = setTimeout(async () => {
       if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
       const { articles } = useFeedStore.getState();
-      const fs = useUiStore.getState().feedSettings;
+      const prefs = useUiStore.getState();
       const idx = articles.findIndex((a) => a.id === cur.id);
       if (idx < 0) return;
 
@@ -275,7 +277,7 @@ export default function ReadingPane({ showBack }: ReadingPaneProps) {
 
       const upcoming = articles
         .slice(idx + 1, idx + 11) // N+1 … N+10, comme les images
-        .filter((a) => a.url && fs[a.sourceId]?.autoExtract && !peekExtract(a.id));
+        .filter((a) => a.url && feedAutoExtractOn(prefs, a.sourceId) && !peekExtract(a.id));
       if (upcoming.length === 0) return;
       const { extractFullContent } = await import('../../utils/extractContent');
       for (const a of upcoming) {
@@ -432,7 +434,7 @@ export default function ReadingPane({ showBack }: ReadingPaneProps) {
             // flux, qui l'est toujours. Avant la 1.4.10, un flux à extraction
             // automatique donnait ici un squelette : on balayait d'un article
             // gris à l'autre alors que le texte était disponible.
-            const adjAuto = !!useUiStore.getState().feedSettings[adj.sourceId]?.autoExtract;
+            const adjAuto = feedAutoExtractOn(useUiStore.getState(), adj.sourceId);
             const adjExtract = peekExtract(adj.id)?.content ?? null;
             const adjKind = readingBodyKind({ rssHtml: adj.content, extractedHtml: adjExtract, autoExtract: adjAuto });
             const adjHtml = adjKind === 'skeleton' ? '' : displayedHtml(adj.content, adjExtract);
@@ -618,8 +620,7 @@ export default function ReadingPane({ showBack }: ReadingPaneProps) {
               // content is in (or 1.5s), so we reveal the extracted article
               // directly instead of flashing the RSS body then reflowing.
               const newArt = useFeedStore.getState().selectedArticle;
-              const fs = useUiStore.getState().feedSettings;
-              const needsExtract = newArt && fs[newArt.sourceId]?.autoExtract
+              const needsExtract = newArt && feedAutoExtractOn(useUiStore.getState(), newArt.sourceId)
                 && lastExtractedId.current !== newArt.id;
               if (needsExtract) {
                 const t0 = Date.now();
@@ -795,7 +796,7 @@ export default function ReadingPane({ showBack }: ReadingPaneProps) {
   // automatique affichait le squelette même quand du texte était disponible :
   // c'est ce qui donnait à l'application son air de charger sans arrêt.
   // La règle vit dans `src/lib/readingBody.ts`, testée à part.
-  const feedAutoExtract = !!feedSettings[article?.sourceId]?.autoExtract;
+  const feedAutoExtract = feedAutoExtractOn({ autoExtractAll, feedSettings }, article?.sourceId);
   const bodyState = {
     rssHtml: article?.content,
     extractedHtml: extractedContent?.content ?? null,

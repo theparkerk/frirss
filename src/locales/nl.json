@@ -45,7 +45,8 @@
     "expandCategory": "Categorie uitklappen",
     "collapseCategory": "Categorie inklappen",
     "starOnGithub": "Geef een ster op GitHub",
-    "support": "Steun het project"
+    "support": "Steun het project",
+    "autoExtractAllOn": "Automatisch volledig artikel (aan voor alle feeds)"
   },
   "addFeed": {
     "title": "Een RSS-feed toevoegen",
@@ -170,7 +171,9 @@
       "unreadScope": "Filter Ongelezen",
       "unreadScopeFeed": "Per feed",
       "unreadScopeAll": "Alle feeds",
-      "unreadScopeHint": "Bij ‘Per feed’ houdt elke feed zijn eigen keuze. Bij ‘Alle feeds’ geldt de knop Ongelezen overal. Terug naar ‘Per feed’ wist de keuzes per feed: elke feed begint bij de huidige stand."
+      "unreadScopeHint": "Bij ‘Per feed’ houdt elke feed zijn eigen keuze. Bij ‘Alle feeds’ geldt de knop Ongelezen overal. Terug naar ‘Per feed’ wist de keuzes per feed: elke feed begint bij de huidige stand.",
+      "autoExtractAll": "Volledig artikel voor alle feeds",
+      "autoExtractAllHint": "Elk artikel opent met de volledige pagina, alsof \"Automatisch volledig artikel\" voor elke feed aanstaat. Uitzetten herstelt de keuzes per feed."
     },
     "branding": {
       "language": "Taal",
