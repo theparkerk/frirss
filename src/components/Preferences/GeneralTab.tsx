@@ -16,6 +16,8 @@ export default function GeneralTab() {
   const inlineVideos = useUiStore((s) => s.inlineVideos);
   const autoExtractAll = useUiStore((s) => s.autoExtractAll);
   const setAutoExtractAll = useUiStore((s) => s.setAutoExtractAll);
+  const swipeRightBack = useUiStore((s) => s.swipeRightBack);
+  const setSwipeRightBack = useUiStore((s) => s.setSwipeRightBack);
   const setInlineVideos = useUiStore((s) => s.setInlineVideos);
   const { shortcuts, setShortcut, resetShortcuts } = useUiStore();
   const [editing, setEditing] = useState<string | null>(null);
@@ -111,6 +113,23 @@ export default function GeneralTab() {
               checked={autoExtractAll}
               onChange={setAutoExtractAll}
               ariaLabel={t('preferences.general.autoExtractAll')}
+            />
+          </span>
+        </div>
+
+        {/* Mobile: right swipe in the article returns to the list */}
+        <div className="flex items-start justify-between gap-4 select-none mt-4">
+          <span className="text-xs" style={{ color: 'var(--list-summary)' }}>
+            {t('preferences.general.swipeRightBack')}
+            <span className="block text-[11px] opacity-70 mt-0.5">
+              {t('preferences.general.swipeRightBackHint')}
+            </span>
+          </span>
+          <span className="mt-0.5">
+            <ToggleSwitch
+              checked={swipeRightBack}
+              onChange={setSwipeRightBack}
+              ariaLabel={t('preferences.general.swipeRightBack')}
             />
           </span>
         </div>

@@ -173,7 +173,9 @@
       "unreadScopeAll": "Tutti i feed",
       "unreadScopeHint": "Con «Per feed», ogni feed mantiene la propria scelta. Con «Tutti i feed», il pulsante Non letti vale ovunque. Tornare a «Per feed» cancella le scelte per feed: ogni feed riparte dallo stato attuale.",
       "autoExtractAll": "Articolo completo per tutti i feed",
-      "autoExtractAllHint": "Ogni articolo si apre con la pagina completa, come se «Articolo completo automatico» fosse attivo su ogni feed. Disattivando tornano le scelte per feed."
+      "autoExtractAllHint": "Ogni articolo si apre con la pagina completa, come se «Articolo completo automatico» fosse attivo su ogni feed. Disattivando tornano le scelte per feed.",
+      "swipeRightBack": "Scorrere a destra torna alla lista",
+      "swipeRightBackHint": "Sul telefono, scorrere un articolo verso destra torna alla lista invece di aprire il precedente. Verso sinistra apre sempre il successivo."
     },
     "branding": {
       "language": "Lingua",

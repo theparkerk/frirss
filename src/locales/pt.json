@@ -173,7 +173,9 @@
       "unreadScopeAll": "Todos os feeds",
       "unreadScopeHint": "Com «Por fonte», cada fonte guarda a sua escolha. Com «Todos os feeds», o botão Não lidos aplica-se em todo o lado. Voltar a «Por fonte» apaga as escolhas por fonte: cada fonte parte do estado atual.",
       "autoExtractAll": "Artigo completo para todos os feeds",
-      "autoExtractAllHint": "Cada artigo abre com a página completa, como se «Artigo completo automático» estivesse ativo em cada feed. Desligar devolve as escolhas por feed."
+      "autoExtractAllHint": "Cada artigo abre com a página completa, como se «Artigo completo automático» estivesse ativo em cada feed. Desligar devolve as escolhas por feed.",
+      "swipeRightBack": "Deslizar para a direita volta à lista",
+      "swipeRightBackHint": "No telemóvel, deslizar um artigo para a direita volta à lista em vez de abrir o anterior. Para a esquerda continua a abrir o seguinte."
     },
     "branding": {
       "language": "Idioma",

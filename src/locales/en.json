@@ -173,7 +173,9 @@
       "unreadScopeAll": "All feeds",
       "unreadScopeHint": "With Per feed, each feed keeps its own choice. With All feeds, the Unread button applies everywhere. Switching back to Per feed erases the per-feed choices: every feed starts from the current state.",
       "autoExtractAll": "Full article for every feed",
-      "autoExtractAllHint": "Every article opens with the full page fetched, as if \"Auto full article\" were on for each feed. Turning it off restores the per-feed choices."
+      "autoExtractAllHint": "Every article opens with the full page fetched, as if \"Auto full article\" were on for each feed. Turning it off restores the per-feed choices.",
+      "swipeRightBack": "Swipe right returns to the list",
+      "swipeRightBackHint": "On the phone, swiping right on an article goes back to the article list instead of the previous article. Swiping left still opens the next one."
     },
     "branding": {
       "language": "Language",

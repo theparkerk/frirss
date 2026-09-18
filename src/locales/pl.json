@@ -173,7 +173,9 @@
       "unreadScopeAll": "Wszystkie kanały",
       "unreadScopeHint": "W trybie „Osobno” każdy kanał zapamiętuje własny wybór. W trybie „Wszystkie kanały” przycisk Nieprzeczytane działa wszędzie. Powrót do „Osobno” usuwa wybory poszczególnych kanałów: każdy kanał zaczyna od bieżącego stanu.",
       "autoExtractAll": "Pełny artykuł dla wszystkich kanałów",
-      "autoExtractAllHint": "Każdy artykuł otwiera się z pełną stroną, jak gdyby „Automatycznie pełny artykuł” było włączone dla każdego kanału. Wyłączenie przywraca ustawienia per kanał."
+      "autoExtractAllHint": "Każdy artykuł otwiera się z pełną stroną, jak gdyby „Automatycznie pełny artykuł” było włączone dla każdego kanału. Wyłączenie przywraca ustawienia per kanał.",
+      "swipeRightBack": "Przeciągnięcie w prawo wraca do listy",
+      "swipeRightBackHint": "Na telefonie przeciągnięcie artykułu w prawo wraca do listy zamiast otwierać poprzedni. W lewo nadal otwiera następny."
     },
     "branding": {
       "language": "Język",

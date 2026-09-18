@@ -173,7 +173,9 @@
       "unreadScopeAll": "Alle Feeds",
       "unreadScopeHint": "Bei „Pro Feed“ behält jeder Feed seine eigene Wahl. Bei „Alle Feeds“ gilt die Schaltfläche Ungelesen überall. Zurück zu „Pro Feed“ löscht die Einzelwahl: Jeder Feed startet vom aktuellen Zustand.",
       "autoExtractAll": "Vollständiger Artikel für alle Feeds",
-      "autoExtractAllHint": "Jeder Artikel öffnet mit der vollständigen Seite, als wäre „Automatisch vollständiger Artikel“ für jeden Feed aktiv. Ausschalten stellt die Einstellungen pro Feed wieder her."
+      "autoExtractAllHint": "Jeder Artikel öffnet mit der vollständigen Seite, als wäre „Automatisch vollständiger Artikel“ für jeden Feed aktiv. Ausschalten stellt die Einstellungen pro Feed wieder her.",
+      "swipeRightBack": "Wischen nach rechts kehrt zur Liste zurück",
+      "swipeRightBackHint": "Auf dem Telefon führt Wischen nach rechts zur Artikelliste statt zum vorherigen Artikel. Wischen nach links öffnet weiterhin den nächsten."
     },
     "branding": {
       "language": "Sprache",

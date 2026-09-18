@@ -1261,6 +1261,15 @@ Vignette cliquable (façade) au lieu d'un `<iframe>` chargé d'emblée.
 
 ---
 
+### Balayage vers la droite = retour à la liste (fork, mobile)
+
+Préférences → Général → « Balayer vers la droite revient à la liste »
+(`swipeRightBack`, synchronisé). Éteint (défaut amont), le balayage droit ouvre
+l'article précédent. Allumé, l'article glisse hors de l'écran sur le fond du
+volet — sans fantôme d'article précédent — puis `selectArticle(null)` rend la
+main à la liste, comme le bouton Retour ; le balayage gauche reste « article
+suivant ». La décision vit dans `src/lib/swipeOutcome.ts`, testée à part.
+
 ### Article complet pour tous les flux (fork)
 
 Préférences → Général → « Article complet pour tous les flux »

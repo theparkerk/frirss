@@ -173,7 +173,9 @@
       "unreadScopeAll": "Tous les flux",
       "unreadScopeHint": "Par flux, chaque flux retient son choix. Tous les flux, le bouton Non lus s'applique partout. Revenir à Par flux efface les choix par flux : chaque flux repart de l'état actuel.",
       "autoExtractAll": "Article complet pour tous les flux",
-      "autoExtractAllHint": "Chaque article s'ouvre avec la page complète, comme si « Extraction automatique » était activée sur chaque flux. Désactiver rend la main aux réglages par flux."
+      "autoExtractAllHint": "Chaque article s'ouvre avec la page complète, comme si « Extraction automatique » était activée sur chaque flux. Désactiver rend la main aux réglages par flux.",
+      "swipeRightBack": "Balayer vers la droite revient à la liste",
+      "swipeRightBackHint": "Sur téléphone, balayer un article vers la droite revient à la liste au lieu d'ouvrir l'article précédent. Vers la gauche ouvre toujours le suivant."
     },
     "branding": {
       "language": "Langue",

@@ -193,6 +193,9 @@ export interface UiState {
   /** Global « Auto full article » for every feed (synced). See src/lib/autoExtract.ts. */
   autoExtractAll: boolean;
   setAutoExtractAll: (v: boolean) => void;
+  /** Mobile: a right swipe in the reading pane returns to the list (synced). */
+  swipeRightBack: boolean;
+  setSwipeRightBack: (v: boolean) => void;
   setFeedAutoExtract: (feedId: string, value: boolean) => void;
   getFeedAutoExtract: (feedId: string) => boolean;
   /** Set (or clear, with '') this feed's layout override. */
@@ -532,6 +535,11 @@ export const useUiStore = create<UiState>()((set, get) => ({
   // Global switch above the per-feed ones — one toggle instead of one
   // context menu per feed.
   autoExtractAll: loadJson('frirss_autoExtractAll', false),
+  swipeRightBack: loadJson('frirss_swipeRightBack', false),
+  setSwipeRightBack: (v) => {
+    localStorage.setItem('frirss_swipeRightBack', JSON.stringify(v));
+    set({ swipeRightBack: v });
+  },
   setAutoExtractAll: (v) => {
     localStorage.setItem('frirss_autoExtractAll', JSON.stringify(v));
     set({ autoExtractAll: v });
@@ -680,7 +688,7 @@ export const useUiStore = create<UiState>()((set, get) => ({
       'showSourceInFeed', 'showSourceInAll', 'feedSettings', 'shortcuts',
       'labelsCollapsed', 'savedCollapsed', 'savedCategoryNames', 'collapsedLabelGroups', 'collapsedCategories', 'unreadOnlyByFeed', 'unreadOnlyScope', 'unreadOnlyAll', 'hideReadFeeds',
       'confirmMarkAllRead', 'markReadOnScroll', 'showListFavicons', 'offlineImagePreset', 'inlineVideos', 'refreshHintDismissed',
-      'rowActions', 'autoExtractAll',
+      'rowActions', 'autoExtractAll', 'swipeRightBack',
     ];
     for (const k of jsonKeys) {
       if (has(k) && prefs[k] !== undefined && prefs[k] !== null) {
@@ -719,7 +727,7 @@ export const UI_SYNC_KEYS = [
   'feedSettings', 'appTitle', 'appLogo', 'logoMode', 'shortcuts',
   'labelsCollapsed', 'savedCollapsed', 'savedCategoryNames', 'collapsedLabelGroups', 'collapsedCategories', 'unreadOnlyByFeed', 'unreadOnlyScope', 'unreadOnlyAll', 'hideReadFeeds',
   'confirmMarkAllRead', 'markReadOnScroll', 'showListFavicons',
-  'offlineImagePreset', 'inlineVideos', 'refreshHintDismissed', 'rowActions', 'autoExtractAll',
+  'offlineImagePreset', 'inlineVideos', 'refreshHintDismissed', 'rowActions', 'autoExtractAll', 'swipeRightBack',
 ];
 
 // Keys into preferences.shortcuts.* in the locale files

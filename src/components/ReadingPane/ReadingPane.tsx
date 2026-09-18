@@ -17,6 +17,7 @@ import { extractYouTubeId, facadeMarkup, youtubeThumbnail } from '../../lib/yout
 import { READ_LATER_PREFIX, STARRED_PREFIX } from '../../lib/savedCategories';
 import { readableTextOn } from '../../lib/readableText';
 import { feedAutoExtractOn } from '../../lib/autoExtract';
+import { swipeOutcome } from '../../lib/swipeOutcome';
 import { planHeroWarm, runHeroWarm } from '../../lib/heroWarm';
 import { rememberImageSize } from '../../lib/imageAspect';
 import { formatArticleDate } from '../../utils/dates';
@@ -101,6 +102,8 @@ interface SwipeTouch {
   preview?: HTMLDivElement | null;
   previewSide?: number;
   adj?: Article;
+  /** Right swipe that will return to the list (preference `swipeRightBack`). */
+  back?: boolean;
 }
 
 interface ReadingPaneProps {
@@ -409,8 +412,12 @@ export default function ReadingPane({ showBack }: ReadingPaneProps) {
           return;                     // still ambiguous → keep waiting, don't lock
         }
 
+        // A right swipe that goes back to the list slides the article away
+        // over the panel background: no ghost of a previous article.
+        t.back = dx > 0 && useUiStore.getState().swipeRightBack;
+
         // Pre-render adjacent article when swipe direction is decided
-        if (contentWrapperRef.current) {
+        if (contentWrapperRef.current && !t.back) {
           const state = useFeedStore.getState();
           const idx = state.articles.findIndex(a => a.id === state.selectedArticle?.id);
           const goingNext = dx < 0;
@@ -524,9 +531,30 @@ export default function ReadingPane({ showBack }: ReadingPaneProps) {
       const idx = state.articles.findIndex(a => a.id === state.selectedArticle?.id);
       const hasNext = idx >= 0 && idx < state.articles.length - 1;
       const hasPrev = idx > 0;
+      const outcome = swipeOutcome({
+        dx: currentX, threshold, hasNext, hasPrev,
+        swipeRightBack: !!t.back,
+      });
 
-      if ((currentX < -threshold && hasNext) || (currentX > threshold && hasPrev)) {
-        const goingNext = currentX < -threshold;
+      if (outcome === 'back') {
+        // Slide the article off to the right, then hand the screen to the list.
+        // Transforms are reset BEFORE deselecting so the pane comes back at rest.
+        animatingRef.current = true;
+        realEl.style.transition = 'transform 0.25s cubic-bezier(0.32, 0.72, 0, 1)';
+        realEl.style.transform = 'translateX(' + w + 'px)';
+        setTimeout(() => {
+          realEl.style.transition = '';
+          realEl.style.transform = '';
+          swipeXRef.current = 0;
+          animatingRef.current = false;
+          cleanupPreview(t);
+          useFeedStore.getState().selectArticle(null);
+        }, 250);
+        return;
+      }
+
+      if (outcome === 'next' || outcome === 'prev') {
+        const goingNext = outcome === 'next';
         animatingRef.current = true;
         const dur = 'transform 0.3s cubic-bezier(0.32, 0.72, 0, 1)';
 

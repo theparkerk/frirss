@@ -173,7 +173,9 @@
       "unreadScopeAll": "Todas las fuentes",
       "unreadScopeHint": "Con «Por fuente», cada fuente conserva su propia elección. Con «Todas las fuentes», el botón No leídos se aplica en todas partes. Volver a «Por fuente» borra las elecciones por fuente: cada fuente parte del estado actual.",
       "autoExtractAll": "Artículo completo para todas las fuentes",
-      "autoExtractAllHint": "Cada artículo se abre con la página completa, como si «Artículo completo automático» estuviera activado en cada fuente. Al desactivarlo vuelven los ajustes por fuente."
+      "autoExtractAllHint": "Cada artículo se abre con la página completa, como si «Artículo completo automático» estuviera activado en cada fuente. Al desactivarlo vuelven los ajustes por fuente.",
+      "swipeRightBack": "Deslizar a la derecha vuelve a la lista",
+      "swipeRightBackHint": "En el teléfono, deslizar un artículo a la derecha vuelve a la lista en lugar de abrir el anterior. A la izquierda sigue abriendo el siguiente."
     },
     "branding": {
       "language": "Idioma",
