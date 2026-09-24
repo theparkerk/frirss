@@ -238,6 +238,7 @@ export default function ArticleList() {
   const scrollKeyRef = useRef(scrollKey);
   scrollKeyRef.current = scrollKey;
   const didRestoreRef = useRef(false);
+  const previousSelectionRef = useRef({ scrollKey, selectedFeed });
 
   // ── Apparition échelonnée ────────────────────────────────────────
   // Le décalage d'entrée se décidait sur la seule position : la ligne
@@ -336,6 +337,18 @@ export default function ArticleList() {
       loadMore();
     }
   }, [continuation, loading, loadingMore, loadMore]);
+
+  // This scroller stays mounted while switching feeds and categories. Clear its
+  // old offset on navigation, including a second click on the same category.
+  // Keep the saved offset for a remount of the same view (returning from an article).
+  useLayoutEffect(() => {
+    const previous = previousSelectionRef.current;
+    if (previous.scrollKey === scrollKey && previous.selectedFeed === selectedFeed) return;
+    previousSelectionRef.current = { scrollKey, selectedFeed };
+    listScrollMem.delete(scrollKey);
+    if (listRef.current) listRef.current.scrollTop = 0;
+    didRestoreRef.current = true;
+  }, [scrollKey, selectedFeed]);
 
   // Restore the saved scroll position once, after the list has content
   // (covers remounts; on mobile the list stays mounted so position persists).
